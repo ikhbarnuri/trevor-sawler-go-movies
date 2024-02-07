@@ -1,9 +1,30 @@
+import {useEffect, useState} from "react";
+import {useParams} from "react-router-dom";
+
 function Movie() {
+    const [movie, setMovie] = useState({})
+    let {id} = useParams();
+
+    useEffect(() => {
+        let myMovie = {
+            id: 1,
+            title: "Highlander",
+            releaseDate: "1900-03-09",
+            runtime: 116,
+            mpaa_rating: "R",
+            description: "Some long description",
+        };
+        setMovie(myMovie)
+
+    }, [id]);
+
     return (
         <>
-            <div className="text-center">
-                <h2>Movie</h2>
+            <div>
+                <h2>Movie: {movie.title}</h2>
+                <small><em>{movie.releaseDate}, {movie.runtime} minutes, Rated {movie.mpaa_rating}</em></small>
                 <hr/>
+                <p>{movie.description}</p>
             </div>
         </>
     );
