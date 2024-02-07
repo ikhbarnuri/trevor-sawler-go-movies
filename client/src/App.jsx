@@ -1,4 +1,4 @@
-import {Link, Outlet} from "react-router-dom";
+import {Link, Outlet, useNavigate} from "react-router-dom";
 import {useState} from "react";
 import Alert from "./components/form/Alert.jsx";
 
@@ -6,6 +6,13 @@ function App() {
     const [jwtToken, setJwtToken] = useState("")
     const [alertMessage, setAlertMessage] = useState("")
     const [alertClassName, setAlertClassName] = useState("d-none")
+
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+        setJwtToken("")
+        navigate("/login")
+    }
 
     return (
         <div className="container">
@@ -17,7 +24,7 @@ function App() {
                     {jwtToken === "" ? (
                         <Link to="/login"><span className="badge bg-success">Login</span></Link>
                     ) : (
-                        <a href="#!"><span className="badge bg-danger">Logout</span></a>
+                        <a href="#!" onClick={handleLogout}><span className="badge bg-danger">Logout</span></a>
                     )}
                 </div>
                 <hr className="mb-3"/>
