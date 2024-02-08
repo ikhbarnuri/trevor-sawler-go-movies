@@ -10,6 +10,7 @@ func (app *application) routes() http.Handler {
 	mux := chi.NewMux()
 
 	mux.Use(middleware.Recoverer)
+	mux.Use(app.enableCORS)
 
 	mux.Get("/", app.Home)
 	mux.Get("/movies", app.AllMovies)
