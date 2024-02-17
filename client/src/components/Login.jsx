@@ -7,7 +7,7 @@ function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
-    const {setJwtToken, setAlertClassName, setAlertMessage} = useOutletContext();
+    const {setJwtToken, setAlertClassName, setAlertMessage, toggleRefresh} = useOutletContext();
 
     const navigate = useNavigate();
 
@@ -35,9 +35,10 @@ function Login() {
                     setAlertClassName("alert-danger")
                     setAlertMessage(data.message)
                 } else {
-                    setJwtToken(data.token);
+                    setJwtToken(data.access_token);
                     setAlertClassName("d-none")
                     setAlertMessage("")
+                    toggleRefresh(true)
                     navigate("/")
                 }
             })
