@@ -2,7 +2,6 @@ package main
 
 import (
 	"errors"
-	"log"
 	"net/http"
 )
 
@@ -30,7 +29,7 @@ func (app *application) AllMovies(w http.ResponseWriter, r *http.Request) {
 	_ = app.writeJSON(w, http.StatusOK, movies)
 }
 
-func (app *application) authenticate(w http.ResponseWriter, r *http.Request) {
+func (app *application) Authenticate(w http.ResponseWriter, r *http.Request) {
 	var requestPayload struct {
 		Email    string `json:"email"`
 		Password string `json:"password"`
@@ -66,9 +65,8 @@ func (app *application) authenticate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	log.Println(tokens.Token)
 	refreshCookie := app.auth.GetRefreshCookie(tokens.RefreshToken)
 	http.SetCookie(w, refreshCookie)
 
-	app.writeJSON(w, http.StatusAccepted, tokens)
+	_ = app.writeJSON(w, http.StatusAccepted, tokens)
 }
