@@ -70,7 +70,7 @@ func (app *application) Authenticate(w http.ResponseWriter, r *http.Request) {
 	refreshCookie := app.auth.GetRefreshCookie(tokens.RefreshToken)
 	http.SetCookie(w, refreshCookie)
 
-	_ = app.writeJSON(w, http.StatusAccepted, tokens)
+	app.writeJSON(w, http.StatusAccepted, tokens)
 }
 
 func (app *application) refreshToken(w http.ResponseWriter, r *http.Request) {
@@ -116,4 +116,9 @@ func (app *application) refreshToken(w http.ResponseWriter, r *http.Request) {
 			app.writeJSON(w, http.StatusOK, pair)
 		}
 	}
+}
+
+func (app *application) logout(w http.ResponseWriter, r *http.Request) {
+	http.SetCookie(w, app.auth.GetExpiredRefreshCookie())
+	w.WriteHeader(http.StatusAccepted)
 }
