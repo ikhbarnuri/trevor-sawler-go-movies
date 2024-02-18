@@ -2,7 +2,7 @@ package main
 
 import "net/http"
 
-func (app *application) enableCORS(h http.Handler) http.Handler {
+func (app *application) enableCORS(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Access-Control-Allow-Origin", "http://localhost:5173")
 		w.Header().Set("Access-Control-Allow-Credentials", "true")
@@ -13,7 +13,19 @@ func (app *application) enableCORS(h http.Handler) http.Handler {
 			w.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, X-CSRF-Token, Authorization, X-Requested-With")
 			return
 		} else {
-			h.ServeHTTP(w, r)
+			next.ServeHTTP(w, r)
 		}
+	})
+}
+
+func (app *application) authRequire(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		_, _, err := app.auth.GetTokenFromHeaderAndVerify(w, r)
+		if err != nil {
+			w.WriteHeader(http.StatusUnauthorized)
+			return
+		}
+
+		next.ServeHTTP(w, r)
 	})
 }
